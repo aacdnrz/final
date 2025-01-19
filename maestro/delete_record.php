@@ -25,5 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ID: <input type="number" name="id" required><br>
         <button type="submit">Delete Record</button>
     </form>
+
+    <form action="main_menu.php" method="get">
+        <button type="submit">Exit</button>
+    </form>
+    
 </body>
 </html>

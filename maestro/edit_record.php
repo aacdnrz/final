@@ -36,5 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         Remarks: <input type="text" name="remarks"><br>
         <button type="submit">Update Record</button>
     </form>
+
+    <form action="main_menu.php" method="get">
+        <button type="submit">Exit</button>
+    </form>
+    
 </body>
 </html>

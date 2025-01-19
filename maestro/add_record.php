@@ -1,38 +1,56 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "maestro");
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_record'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $role = $_POST['role'];
-    $createdDate = $_POST['created_date'];
+    $created_date = $_POST['created_date'];
     $remarks = $_POST['remarks'];
 
     $sql = "INSERT INTO login (Username, Password, Role, CreatedDate, Remarks) 
-            VALUES ('$username', '$password', '$role', '$createdDate', '$remarks')";
-
-    if ($conn->query($sql)) {
-        echo "Record added successfully.";
+            VALUES ('$username', '$password', '$role', '$created_date', '$remarks')";
+    
+    if (mysqli_query($conn, $sql)) {
+        echo "<p>Record added successfully.</p>";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "<p>Error: " . $sql . "<br>" . mysqli_error($conn) . "</p>";
     }
 }
+
+// Close the database connection
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add New Record</title>
+    <title>Add Record</title>
 </head>
 <body>
-    <h1>Add New Record</h1>
-    <form method="POST">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
-        Role: <input type="text" name="role" required><br>
-        Created Date: <input type="date" name="created_date" required><br>
-        Remarks: <input type="text" name="remarks"><br>
-        <button type="submit">Add Record</button>
+    <h1>Add a New Record</h1>
+    <form method="post" action="add_record.php">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br><br>
+        
+        <label for="created_date">Created Date:</label>
+        <input type="date" id="created_date" name="created_date" required><br><br>
+        
+        <label for="remarks">Remarks:</label>
+        <input type="text" id="remarks" name="remarks"><br><br>
+        
+        <button type="submit" name="add_record">Add Record</button>
+    </form>
+
+    <!-- Exit Button -->
+    <form action="main_menu.php" method="get">
+        <button type="submit">Exit</button>
     </form>
 </body>
 </html>

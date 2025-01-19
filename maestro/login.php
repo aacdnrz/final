@@ -14,24 +14,32 @@ $login_successful = false;
 $message = ''; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $input_username = $_POST['username'];
-    $input_password = $_POST['password'];
+    // Check if username and password are provided in the POST request
+    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+        $input_username = $_POST['username'];
+        $input_password = $_POST['password'];
 
-    $sql = "SELECT * FROM login WHERE username = '$input_username'";
-    $result = $conn->query($sql);
+        $sql = "SELECT * FROM login WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $input_username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if ($row['password'] == $input_password) {
-            $login_successful = true; 
-            header("Location: manage.php"); 
-            exit(); 
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($row['password'] == $input_password) {
+                $login_successful = true; 
+                header("Location: main_menu.php"); 
+                exit(); 
+            } else {
+                $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Password is not correct</p>";
+            }
         } else {
-            $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Password is not correct</p>";
+            $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Username does not exist</p>";
         }
-    } else {
-        $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Username does not exist</p>";
-    }
+
+        $stmt->close();
+    } 
 }
 
 $conn->close();
@@ -115,21 +123,20 @@ $conn->close();
         </style>
         </head>
 
-<body>
 <div class="container">
-        <?php
-        if ($login_successful) {
-            echo "<h2 class='success-message'>Access granted!!!</h2>";
-        } else {
-            echo "<h2>Log in</h2>";
-            echo '<form method="POST">';
-            echo 'Username: <input type="text" name="username" required><br><br>';
-            echo 'Password: <input type="password" name="password" required><br><br>';
-            echo '<input type="submit" value="Login">';
-            echo '</form>';
-            echo $message; 
-        }
-        ?>
-    </div>
+    <?php
+    if ($login_successful) {
+        echo "<h2 class='success-message'>Access granted!!!</h2>";
+    } else {
+        echo "<h2>Log in</h2>";
+        echo '<form method="POST">';
+        echo 'Username: <input type="text" name="username" required><br><br>';
+        echo 'Password: <input type="password" name="password" required><br><br>';
+        echo '<input type="submit" value="Login">';
+        echo '</form>';
+        echo $message; 
+    }
+    ?>
+</div>
 </body>
-</html> 
+</html>
