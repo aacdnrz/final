@@ -18,17 +18,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 <head>
     <title>Delete a Record</title>
+    <script type="text/javascript">
+        // JavaScript function to confirm before submitting the delete form
+        function confirmDelete() {
+            var result = confirm("Are you sure you want to delete this record?");
+            if (result) {
+                document.getElementById("deleteForm").submit(); // Submit the form if confirmed
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Delete a Record</h1>
-    <form method="POST">
-        ID: <input type="number" name="id" required><br>
-        <button type="submit">Delete Record</button>
+    
+    <form id="deleteForm" method="POST" action="">
+        ID: <input type="number" name="id" required><br><br>
+        <button type="button" onclick="confirmDelete()">Delete Record</button> <!-- Calls confirmDelete function -->
     </form>
 
     <form action="main_menu.php" method="get">
         <button type="submit">Exit</button>
     </form>
-    
 </body>
 </html>

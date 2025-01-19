@@ -16,11 +16,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 <head>
     <title>Delete All Records</title>
+    <script type="text/javascript">
+        // JavaScript function to confirm before submitting the delete all form
+        function confirmDeleteAll() {
+            var result = confirm("Are you sure you want to delete all records?");
+            if (result) {
+                document.getElementById("deleteAllForm").submit(); // Submit the form if confirmed
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Delete All Records</h1>
-    <form method="POST">
-        <button type="submit">Delete All Records</button>
+    
+    <form id="deleteAllForm" method="POST" action="">
+        <button type="button" onclick="confirmDeleteAll()">Delete All Records</button> <!-- Calls confirmDeleteAll function -->
+    </form>
+
+    <form action="main_menu.php" method="get">
+        <button type="submit">Exit</button>
     </form>
 </body>
 </html>
