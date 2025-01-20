@@ -51,20 +51,97 @@ if (isset($_POST['import_csv'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import CSV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #fae2e2, #ffbcba, #ff948f, #ff6962, #ff3333);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #c41d1d;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            padding: 30px;
+            width: 500px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: block;
+            background-color: white;
+            color: #c41d1d;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            outline: 1px solid black;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 10px auto;
+            text-align: center;
+            width: 90%;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+        }
+
+        button {
+            background-color: white;
+            color: #c41d1d;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            outline: 1px solid black;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            text-align: center;
+            width: 50%; 
+        }
+
+        button:hover {
+            background-color: #ff948f;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Import CSV File</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="csv_file" accept=".csv">
-        <button type="submit" name="import_csv">Import</button>
-    </form>
-
-    <form action="main_menu.php" method="get">
-        <button type="submit">Exit</button>
-    </form>
-    
+    <div class="container">
+        <h1>Import CSV File</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv">
+        </form>
+        <div class="button-group">
+            <form action="main_menu.php" method="get">
+                <button type="submit">Exit</button>
+            </form>
+            <form method="POST" enctype="multipart/form-data">
+                <button type="submit" name="import_csv">Import</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
