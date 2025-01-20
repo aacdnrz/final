@@ -104,21 +104,22 @@ mysqli_close($conn);
     <div class="container">
         <h1>Add a New Record</h1>
         <form method="post" action="add_record.php">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="role">Role:</label>
-            <input type="text" id="role" name="role" required>
-            
-            <label for="created_date">Created Date:</label>
-            <input type="date" id="created_date" name="created_date" required>
-            
-            <label for="remarks">Remarks:</label>
-            <input type="text" id="remarks" name="remarks">
-        </form>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br><br>
+        
+        <label for="created_date">Created Date:</label>
+        <input type="date" id="created_date" name="created_date" required><br><br>
+        
+        <label for="remarks">Remarks:</label>
+        <input type="text" id="remarks" name="remarks"><br><br>
+        
+    </form>
 
         <div class="button-group">
             <form action="main_menu.php" method="get">
