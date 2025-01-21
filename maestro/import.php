@@ -1,4 +1,5 @@
 <?php
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -6,59 +7,60 @@ $dbname = "maestro";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$login_successful = false; 
-$message = ''; 
+if (isset($_POST['import_csv'])) {
+    // Validate file upload
+    if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == UPLOAD_ERR_OK) {
+        $filename = $_FILES['csv_file']['tmp_name'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if username and password are provided in the POST request
-    if (!empty($_POST['username']) && !empty($_POST['password'])) {
-        $input_username = $_POST['username'];
-        $input_password = $_POST['password'];
+        if (($file = fopen($filename, "r")) !== FALSE) {
+            // Delete all existing records
+            $conn->query("DELETE FROM login");
 
-        $sql = "SELECT * FROM login WHERE username = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $input_username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            // Skip the first row (header)
+            fgetcsv($file);
 
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if ($row['password'] == $input_password) {
-                $login_successful = true; 
-                header("Location: main_menu.php"); 
-                exit(); 
-            } else {
-                $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Password is not correct</p>";
+            // Process CSV rows
+            while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
+                $id = $data[0];
+                $username = $data[1];
+                $password = $data[2];
+                $role = $data[3];
+                $createdDate = date('Y-m-d', strtotime($data[4])); // Convert date format
+                $remarks = $data[5];
+
+                // Insert record into the database
+                $sql = "INSERT INTO login (id, Username, Password, Role, CreatedDate, Remarks) 
+                        VALUES ('$id', '$username', '$password', '$role', '$createdDate', '$remarks')";
+
+                if (!$conn->query($sql)) {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
             }
-        } else {
-            $message = "<p style='color: red; font-weight: bold; text-align: center; margin: 20px;'>Username does not exist</p>";
-        }
 
-        $stmt->close();
-    } 
+            fclose($file);
+            echo "<script>alert('CSV file imported successfully');</script>";
+        } 
+        
+    }
 }
-
-$conn->close();
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <style>
-        * {
-            font-family:  'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import CSV</title>
+    <style>
         body {
-            background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(195, 136, 137, 1),  rgba(181,11,12,1));
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #fae2e2, #ffbcba, #ff948f, #ff6962, #ff3333);
             margin: 0;
             display: flex;
             justify-content: center;
@@ -66,77 +68,81 @@ $conn->close();
             height: 100vh;
         }
 
-        h2 {
-            font-size: 40px; 
-            color: #7E0001; /*4th*/
-            text-shadow: 5px 2px 5px rgba(126, 0, 1, 0.3);
-            font-weight: bolder;
-            text-align: center;
-            margin-bottom: 25px; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px;
-        }
-
         .container {
-            width: 100%;
-            max-width: 400px; 
-            background-color: #FFFFFF; /*1st*/
-            border: 2px solid #7E0001;
-            border-radius: 15px;
-            padding: 35px; 
-            box-shadow: 10px 10px 15px rgba(126, 0, 1, 0.3); 
-        }
-
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1.5px solid black;
-            border-radius: 10px;
-            box-sizing: border-box;
-        }
-
-        input[type="submit"] {
-            background-color: #7E0001; /*4th*/
-            color:  #FFFFFF; /*1st*/
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 150px;
-            margin-left: 95px;
-            font-size: 15px;
-            font-weight: bold;  
-            transition: 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            box-shadow: 10px 15px 15px rgba(126, 0, 1, 0.3);
-        }
-
-        .success-message {
-            color: green;
+            background-color: #c41d1d;
+            color: white;
             text-align: center;
-            margin-top: 10px; 
+            border-radius: 10px;
+            padding: 30px;
+            width: 500px;
         }
 
-        </style>
-        </head>
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
 
-<div class="container">
-    <?php
-    if ($login_successful) {
-        echo "<h2 class='success-message'>Access granted!!!</h2>";
-    } else {
-        echo "<h2>Log in</h2>";
-        echo '<form method="POST">';
-        echo 'Username: <input type="text" name="username" required><br><br>';
-        echo 'Password: <input type="password" name="password" required><br><br>';
-        echo '<input type="submit" value="Login">';
-        echo '</form>';
-        echo $message; 
-    }
-    ?>
-</div>
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: block;
+            background-color: white;
+            color: #c41d1d;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            outline: 1px solid black;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 10px auto;
+            text-align: center;
+            width: 90%;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+        }
+
+        button {
+            background-color: white;
+            color: #c41d1d;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            outline: 1px solid black;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            text-align: center;
+            width: 50%; 
+        }
+
+        button:hover {
+            background-color: #ff948f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Import CSV File</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <button type="submit" name="import_csv">Import</button>
+        </form>
+
+        <div class="button-group">
+            <form action="main_menu.php" method="get">
+                <button type="submit">Exit</button>
+            </form>
+        </div>
+
+    </div>
 </body>
 </html>

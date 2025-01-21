@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             CreatedDate='$createdDate', Remarks='$remarks' WHERE id='$id'";
 
     if ($conn->query($sql)) {
-        echo "Record updated successfully.";
+        echo "<script>alert('Record updated successfully.');</script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-align: center;
             border-radius: 10px;
             padding: 30px;
-            width: 500px
+            width: 500px;
         }
 
         h1 {
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         button:hover {
-            background-color:  #ff948f;
+            background-color: #ff948f;
             color: white;
         }
     </style>
@@ -120,18 +120,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="date" id="created_date" name="created_date" required><br>
 
             <label for="remarks">Remarks:</label>
-            <input type="text" id="remarks" name="remarks"><br>
+            <input type="text" id="remarks" name="remarks" required><br>
 
-            
-        </form>
-        <div class="button-group">
-            <form action="main_menu.php" method="get">
-                <button type="submit">Exit</button>
-            </form>
-            <form>
+            <div class="button-group">
                 <button type="submit">Update Record</button>
-            </form>
-        </div>
+            </div>
+        </form>
+        <form action="main_menu.php" method="get">
+            <button type="submit">Exit</button>
+        </form>
     </div>
 </body>
 </html>
