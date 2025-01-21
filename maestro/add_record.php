@@ -8,13 +8,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_record'])) {
     $created_date = $_POST['created_date'];
     $remarks = $_POST['remarks'];
 
-    $sql = "INSERT INTO login (Username, Password, Role, CreatedDate, Remarks) 
-            VALUES ('$username', '$password', '$role', '$created_date', '$remarks')";
-    
-    if (mysqli_query($conn, $sql)) {
-        echo "<p>Record added successfully.</p>";
+    // Check if username already exists
+    $check_sql = "SELECT COUNT(*) FROM login WHERE Username = '$username'";
+    $result = mysqli_query($conn, $check_sql);
+    $row = mysqli_fetch_row($result);
+    $count = $row[0];
+
+    if ($count > 0) {
+        echo "<script>alert('Username already exists!');</script>";
     } else {
-        echo "<p>Error: " . $sql . "<br>" . mysqli_error($conn) . "</p>";
+        // Insert the record
+        $sql = "INSERT INTO login (Username, Password, Role, CreatedDate, Remarks) 
+                VALUES ('$username', '$password', '$role', '$created_date', '$remarks')";
+        
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>alert('Record added successfully.');</script>";
+        } else {
+            echo "<p>Error: " . $sql . "<br>" . mysqli_error($conn) . "</p>";
+        }
     }
 }
 
@@ -28,6 +39,7 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Record</title>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -91,7 +103,8 @@ mysqli_close($conn);
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
             text-align: center;
-            width: 50%;
+            width: 60%;
+            margin-left: 3rem;
         }
 
         button:hover {
@@ -104,31 +117,29 @@ mysqli_close($conn);
     <div class="container">
         <h1>Add a New Record</h1>
         <form method="post" action="add_record.php">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <label for="role">Role:</label>
-        <input type="text" id="role" name="role" required><br><br>
-        
-        <label for="created_date">Created Date:</label>
-        <input type="date" id="created_date" name="created_date" required><br><br>
-        
-        <label for="remarks">Remarks:</label>
-        <input type="text" id="remarks" name="remarks"><br><br>
-        
-    </form>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
 
-        <div class="button-group">
-            <form action="main_menu.php" method="get">
-                <button type="submit">Exit</button>
-            </form>
-            <form method="post" action="add_record.php">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="role">Role:</label>
+            <input type="text" id="role" name="role" required><br><br>
+
+            <label for="created_date">Created Date:</label>
+            <input type="date" id="created_date" name="created_date" required><br><br>
+
+            <label for="remarks">Remarks:</label>
+            <input type="text" id="remarks" name="remarks"><br><br>
+
+            <div class="button-group">
                 <button type="submit" name="add_record">Add Record</button>
-            </form>
-        </div>
+                <button type="button" onclick="window.location.href='main_menu.php';">Exit</button>
+            </div>
+
+        </form>
+    
     </div>
+
 </body>
 </html>
