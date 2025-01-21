@@ -7,70 +7,79 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #fae2e2, #ffbcba, #ff948f, #ff6962, #ff3333);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             min-height: 100vh;
+            background: linear-gradient(to bottom, #fae2e2, #ffbcba, #ff948f, #ff6962, #ff3333); /* Gradient background */
         }
 
         .container {
-            background-color: #c41d1d;
-            color: white;
-            text-align: center;
-            border-radius: 10px;
-            padding: 30px;
-            width: 80%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
             max-width: 800px;
+            padding: 20px;
+            text-align: center;
         }
 
         h1 {
-            font-size: 2em;
-            text-align: left;
-            margin-left: 10px;
-            margin-bottom: 20px;
+            font-size: 40px;
+            margin: 0 0 20px;
+            color: #c41d1d; /* Red color for the heading */
+            text-align: center;
         }
 
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
             margin: 20px 0;
-            background-color: white;
         }
 
-        table, th, td {
-            border: 1px solid #c41d1d;
+        table thead {
+            background-color: #c41d1d;
+            color: white;
         }
 
-        th, td {
+        table th, table td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
-        th {
-            background-color: #f2f2f2;
+        table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        table th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #ffe6e6;
         }
 
         button {
             display: inline-block;
             background-color: white;
             color: #c41d1d;
-            border: none;
+            border: 2px solid #c41d1d;
             border-radius: 20px;
-            padding: 10px;
-            font-size: 1em;
-            text-decoration: none;
-            outline: 1px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
-            margin: 10px auto;
-            width: 50%;
+            margin-top: 20px;
         }
 
         button:hover {
-            background-color:  #ff948f;
+            background-color: #c41d1d;
             color: white;
         }
     </style>
@@ -91,24 +100,28 @@
 
         if ($result && $result->num_rows > 0): ?>
             <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Created Date</th>
-                    <th>Remarks</th>
-                </tr>
-                <?php while ($row = $result->fetch_assoc()): ?>
+                <thead>
                     <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['username']; ?></td>
-                        <td><?php echo $row['password']; ?></td>
-                        <td><?php echo $row['Role']; ?></td>
-                        <td><?php echo $row['CreatedDate']; ?></td>
-                        <td><?php echo $row['Remarks']; ?></td>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Created Date</th>
+                        <th>Remarks</th>
                     </tr>
-                <?php endwhile; ?>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['username']; ?></td>
+                            <td><?php echo $row['password']; ?></td>
+                            <td><?php echo $row['Role']; ?></td>
+                            <td><?php echo $row['CreatedDate']; ?></td>
+                            <td><?php echo $row['Remarks']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
             </table>
         <?php else: ?>
             <p>No records found.</p>
