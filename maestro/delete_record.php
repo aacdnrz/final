@@ -21,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Delete the record
             $sql = "DELETE FROM login WHERE id='$id'";
             if ($conn->query($sql)) {
-                $message = "<p style='color: green;'>Record with ID $id deleted successfully.</p>";
+                $message = "<p class='message' style='color: green;'>Record with ID $id deleted successfully.</p>";
             } else {
-                $message = "<p style='color: red;'>Error deleting record: " . $conn->error . "</p>";
+                $message = "<p class='message' style='color: red;'>Error deleting record: " . $conn->error . "</p>";
             }
         } else {
-            $message = "<p style='color: red;'>Record with ID $id does not exist.</p>";
+            $message = "<p class='message' style='color: red;'>Record with ID $id does not exist.</p>";
         }
     } else {
-        $message = "<p style='color: red;'>Please enter an ID to delete a record.</p>";
+        $message = "<p class='message' style='color: red;'>Please enter an ID to delete a record.</p>";
     }
 }
 
@@ -51,6 +51,19 @@ $result = $conn->query($sql);
                 document.getElementById("deleteForm").submit();
             }
         }
+
+        // Function to hide messages after 3 seconds
+        function hideMessage() {
+            setTimeout(() => {
+                const message = document.querySelector('.message');
+                if (message) {
+                    message.style.display = 'none';
+                }
+            }, 3000); // 3000ms = 3 seconds
+        }
+
+        // Run the function when the page loads
+        window.onload = hideMessage;
     </script>
     <style>
         body {
@@ -60,81 +73,91 @@ $result = $conn->query($sql);
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             min-height: 100vh;
         }
 
         .container {
-            background-color: #c41d1d;
-            color: white;
-            text-align: center;
-            border-radius: 10px;
-            padding: 30px;
-            width: 80%;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            width: 90%;
             max-width: 800px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
-            font-size: 2em;
+            color: #c41d1d;
             margin-bottom: 20px;
+            font-size: 40px;
         }
 
         table {
-            border-collapse: collapse;
             width: 100%;
-            margin: 20px 0;
-            background-color: white;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        table, th, td {
-            border: 1px solid #c41d1d;
+        table thead {
+            background-color: #c41d1d;
+            color: white;
         }
 
-        th, td {
+        table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        table th:last-child {
+            border-top-right-radius: 10px;
+        }
+        table th, table td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
-        th {
-            background-color: #f2f2f2;
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
 
-        form {
-            margin: 20px 0;
+        table tbody tr:hover {
+            background-color: #ffe6e6;
         }
 
         input[type="number"] {
-            width: 80%;
+            width: 50%;
             padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #c41d1d;
-            margin-bottom: 10px;
-        }
-        
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            border-radius: 10px;
+            border: 2px solid black;
+            margin: 20px 0;
+            font-size: 1em;
+            text-align: center;
         }
 
         button {
-            display: inline-block;
             background-color: white;
             color: #c41d1d;
-            border: none;
-            border-radius: 20px;
-            padding: 10px;
+            border: 2px solid #c41d1d;
+            border-radius: 30px;
+            padding: 10px 20px;
             font-size: 1em;
-            text-decoration: none;
-            outline: 1px solid black;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            margin: 10px auto;
-            width: 45%;
+            transition: all 0.3s ease;
+            font-weight: bold;
         }
 
         button:hover {
             background-color: #ff948f;
             color: white;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .button-group form {
+            margin: 0;
         }
     </style>
 </head>
@@ -142,42 +165,49 @@ $result = $conn->query($sql);
     <div class="container">
         <h1>Delete a Record</h1>
 
+        <!-- Display message -->
         <?php echo $message; ?>
 
+        <!-- Display table -->
         <?php if ($result->num_rows > 0): ?>
             <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Created Date</th>
-                    <th>Remarks</th>
-                </tr>
-                <?php while ($row = $result->fetch_assoc()): ?>
+                <thead>
                     <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['username']; ?></td>
-                        <td><?php echo $row['password']; ?></td>
-                        <td><?php echo $row['Role']; ?></td>
-                        <td><?php echo $row['CreatedDate']; ?></td>
-                        <td><?php echo $row['Remarks']; ?></td>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Created Date</th>
+                        <th>Remarks</th>
                     </tr>
-                <?php endwhile; ?>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['username']; ?></td>
+                            <td><?php echo $row['password']; ?></td>
+                            <td><?php echo $row['Role']; ?></td>
+                            <td><?php echo $row['CreatedDate']; ?></td>
+                            <td><?php echo $row['Remarks']; ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
             </table>
         <?php else: ?>
             <p>No records found in the database.</p>
         <?php endif; ?>
-        <label for="id">ID:</label>
-            <input type="number" name="id" id="id" required>
+
+        <!-- Form for deletion -->
+        <form id="deleteForm" method="POST" action="">
+            <input type="number" name="id" id="id" placeholder="Enter ID to Delete" required>
+        </form>
 
         <div class="button-group">
-        <form action="main_menu.php" method="get">
-            <button type="submit">Exit</button>
-        </form>
-        <form id="deleteForm" method="POST" action="">
+            <form action="main_menu.php" method="get">
+                <button type="submit">Exit</button>
+            </form>
             <button type="button" onclick="confirmDelete()">Delete Record</button>
-        </form>
         </div>
     </div>
 </body>
