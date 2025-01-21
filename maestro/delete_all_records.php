@@ -1,14 +1,12 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "maestro");
+$conn = new mysqli("localhost", "root", "", "login");
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 $message = "";
 
-// Handle delete all request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "DELETE FROM login";
 
@@ -19,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Fetch all records
 $sql = "SELECT * FROM login";
 $result = $conn->query($sql);
 ?>
@@ -43,68 +40,81 @@ $result = $conn->query($sql);
         }
 
         .container {
-            background-color: #c41d1d;
-            color: white;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-sizing: border-box;
             text-align: center;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 30px;
-            width: 80%;
+            width: 90%;
             max-width: 800px;
         }
 
         h1 {
-            font-size: 2em;
-            text-align: left;
-            margin-left: 10px;
-            margin-bottom: 20px;
+            font-size: 40px;
+            color: #c41d1d;
+            text-align: center;
+            margin: 20px;
         }
 
         table {
             border-collapse: collapse;
             width: 100%;
             margin: 20px 0;
-            background-color: white;
+            overflow: hidden;
+            border-radius: 10px;
         }
 
-        table, th, td {
-            border: 1px solid #c41d1d;
+        table thead {
+            background-color: #c41d1d;
+            color: white;
         }
 
-        th, td {
+        table th, table td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
         }
 
-        th {
-            background-color: #f2f2f2;
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #ffe6e6;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
 
         button {
             display: inline-block;
             background-color: white;
             color: #c41d1d;
-            border: none;
+            border: 2px solid #c41d1d;
             border-radius: 20px;
-            padding: 10px;
-            font-size: 1em;
-            text-decoration: none;
-            outline: 1px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s, color 0.3s;
             margin: 10px auto;
-            width: 50%;
+            width: 70%;
         }
 
         button:hover {
             background-color:  #ff948f;
             color: white;
+            transform: scale(1.05);
         }
     </style>
     <script type="text/javascript">
         function confirmDeleteAll() {
             var result = confirm("Are you sure you want to delete all records?");
             if (result) {
-                document.getElementById("deleteAllForm").submit(); 
+                document.getElementById("deleteAllForm").submit(); // Submit the form if confirmed
+            }
         }
     </script>
 </head>
@@ -118,36 +128,40 @@ $result = $conn->query($sql);
 
         <?php if ($result && $result->num_rows > 0): ?>
             <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Role</th>
-                    <th>Created Date</th>
-                    <th>Remarks</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                        <th>Created Date</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['id']); ?></td>
-                        <td><?php echo htmlspecialchars($row['username']); ?></td>
-                        <td><?php echo htmlspecialchars($row['password']); ?></td>
-                        <td><?php echo htmlspecialchars($row['Role']); ?></td>
-                        <td><?php echo htmlspecialchars($row['CreatedDate']); ?></td>
-                        <td><?php echo htmlspecialchars($row['Remarks']); ?></td>
+                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo $row['username']; ?></td>
+                        <td><?php echo $row['password']; ?></td>
+                        <td><?php echo $row['Role']; ?></td>
+                        <td><?php echo $row['CreatedDate']; ?></td>
+                        <td><?php echo $row['Remarks']; ?></td>
                     </tr>
                 <?php endwhile; ?>
+                </tbody>
             </table>
         <?php else: ?>
             <p>No records found in the database.</p>
         <?php endif; ?>
-
-        <form id="deleteAllForm" method="POST" action="">
-            <button type="button" onclick="confirmDeleteAll()">Delete All Records</button>
-        </form>
-
-        <form action="main_menu.php" method="get">
-            <button type="submit">Exit</button>
-        </form>
+        <div class="button-group">
+            <form action="main_menu.php" method="get">
+                <button type="submit">Exit</button>
+            </form>
+            <form id="deleteAllForm" method="POST" action="">
+                <button type="button" onclick="confirmDeleteAll()">Delete All Records</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
