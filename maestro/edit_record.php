@@ -1,7 +1,6 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "maestro");
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
     $username = $_POST['username'];
@@ -10,19 +9,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $createdDate = $_POST['created_date'];
     $remarks = $_POST['remarks'];
 
+    $stmt = $conn->prepare("UPDATE login SET Username = ?, Password = ?, Role = ?, CreatedDate = ?, Remarks = ? WHERE id = ?");
+    $stmt->bind_param("sssssi", $username, $password, $role, $createdDate, $remarks, $id);
 
-    $sql = "UPDATE login SET Username='$username', Password='$password', Role='$role',
-            CreatedDate='$createdDate', Remarks='$remarks' WHERE id='$id'";
-
-
-    if ($conn->query($sql)) {
-        echo "Record updated successfully.";
+    if ($stmt->execute()) {
+        echo "<script>alert('Record updated successfully.');</script>";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $stmt->error;
     }
+
+    $stmt->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,22 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             min-height: 100vh;
         }
 
-
         .container {
             background-color: #c41d1d;
             color: white;
             text-align: center;
             border-radius: 10px;
             padding: 30px;
-            width: 500px
+            width: 500px;
         }
-
 
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
         }
-
 
         label {
             display: block;
@@ -68,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-left: 30px;
         }
 
-
         input {
             width: 85%;
             padding: 8px;
@@ -77,18 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 8px;
             outline: 1px solid black;
         }
-
-
-        form {
-            margin-bottom: 20px;
-        }
-
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Two columns */
-        }
-
 
         button {
             display: inline-block;
@@ -106,9 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             width: 60%;
         }
 
-
         button:hover {
-            background-color:  #ff948f;
+            background-color: #ff948f;
             color: white;
         }
     </style>
@@ -120,40 +101,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="id">ID:</label>
             <input type="number" id="id" name="id" required><br>
 
-
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
-
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
 
-
             <label for="role">Role:</label>
             <input type="text" id="role" name="role" required><br>
-
 
             <label for="created_date">Created Date:</label>
             <input type="date" id="created_date" name="created_date" required><br>
 
-
             <label for="remarks">Remarks:</label>
-            <input type="text" id="remarks" name="remarks"><br>
+            <input type="text" id="remarks" name="remarks" required><br>
 
-
-           
+            <button type="submit">Update Record</button>
         </form>
-        <div class="button-group">
-            <form action="main_menu.php" method="get">
-                <button type="submit">Exit</button>
-            </form>
-            <form>
-                <button type="submit">Update Record</button>
-            </form>
-        </div>
+        <form action="main_menu.php" method="get">
+            <button type="submit">Exit</button>
+        </form>
     </div>
 </body>
 </html>
-
-
-

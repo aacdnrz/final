@@ -204,10 +204,10 @@ $result = $conn->query($sql);
         </form>
 
         <div class="button-group">
+        <button type="button" onclick="confirmDelete()">Delete Record</button>
             <form action="main_menu.php" method="get">
                 <button type="submit">Exit</button>
             </form>
-            <button type="button" onclick="confirmDelete()">Delete Record</button>
         </div>
     </div>
 </body>

@@ -160,11 +160,11 @@ $result = $conn->query($sql);
             <p>No records found in the database.</p>
         <?php endif; ?>
         <div class="button-group">
+        <form id="deleteAllForm" method="POST" action="">
+                <button type="button" onclick="confirmDeleteAll()">Delete All Records</button>
+            </form>
             <form action="main_menu.php" method="get">
                 <button type="submit">Exit</button>
-            </form>
-            <form id="deleteAllForm" method="POST" action="">
-                <button type="button" onclick="confirmDeleteAll()">Delete All Records</button>
             </form>
         </div>
     </div>
