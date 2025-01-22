@@ -14,6 +14,7 @@
             height: 100vh;
         }
 
+
         .main-menu {
             background-color: #c41d1d;
             color: white;
@@ -23,24 +24,28 @@
             width: 500px;
         }
 
+
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
         }
 
+
         ul {
             list-style-type: none;
             padding: 0;
-            margin: 0 auto; 
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr; 
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
-            justify-content: center; 
+            justify-content: center;
         }
+
 
         ul li {
             margin: 0;
         }
+
 
         a {
             display: block;
@@ -57,26 +62,29 @@
             text-align: center;
         }
 
+
         a:hover {
             background-color: #ff948f;
             color: white;
         }
 
+
         .exit-button {
-            width: 50%;
+            width: 30%;
             background-color: white;
             color: #c41d1d;
             font-weight: bold;
             margin-top: 20px;
-            margin-left: auto; 
-            margin-right: auto; 
-            border: none;
-            padding: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid black;
+            padding: 10px 20px;
             font-size: 1em;
             cursor: pointer;
             border-radius: 20px;
-            outline: none;
+            transition: background-color 0.3s, color 0.3s;
         }
+
 
         .exit-button:hover {
             background-color: #ff948f;
