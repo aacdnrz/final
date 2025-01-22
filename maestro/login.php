@@ -19,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $input_username = $_POST['username'];
         $input_password = $_POST['password'];
 
-        // SQL query to select the user by username
         $sql = "SELECT * FROM login WHERE username = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $input_username);
@@ -28,9 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            
-            // Use password_verify() to check the hashed password
-            if (password_verify($input_password, $row['password'])) {
+            if ($row['password'] == $input_password) {
                 $login_successful = true; 
                 header("Location: main_menu.php"); 
                 exit(); 
