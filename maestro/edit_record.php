@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="date" id="created_date" name="created_date" required><br>
 
             <label for="remarks">Remarks:</label>
-            <input type="text" id="remarks" name="remarks" required><br>
+            <input type="text" id="remarks" name="remarks"><br>
 
             <button type="submit">Update Record</button>
         </form>

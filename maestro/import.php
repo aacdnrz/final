@@ -26,12 +26,14 @@ if (isset($_POST['import_csv'])) {
 
             // Process CSV rows
             while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
-                $id = $data[0];
-                $username = $data[1];
-                $password = $data[2];
-                $role = $data[3];
-                $createdDate = date('Y-m-d', strtotime($data[4])); // Convert date format
-                $remarks = $data[5];
+
+                // Map CSV columns to variables, including CreatedDate and Remarks
+                $id = $data[1]; // ID column (First column in CSV)
+                $username = $data[2]; // Username column (Second column in CSV)
+                $password = $data[3]; // Password column (Third column in CSV)
+                $role = $data[4]; // Role column (Fourth column in CSV)
+                $createdDate = $data[5]; // CreatedDate column (Fifth column in CSV)
+                $remarks = $data[6]; // Remarks column (Sixth column in CSV)
 
                 // Insert record into the database
                 $sql = "INSERT INTO login (id, Username, Password, Role, CreatedDate, Remarks) 
@@ -44,12 +46,12 @@ if (isset($_POST['import_csv'])) {
 
             fclose($file);
             echo "<script>alert('CSV file imported successfully');</script>";
-        } 
-        
+        } else {
+            echo "Error opening CSV file.";
+        }
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
