@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "login");
+$conn = new mysqli("localhost", "root", "", "maestro");
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
