@@ -79,7 +79,7 @@ if (isset($_POST['import_csv'])) {
 
         h1 {
             font-size: 2em;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         form {
@@ -106,6 +106,11 @@ if (isset($_POST['import_csv'])) {
         .button-group {
             display: grid;
             grid-template-columns: 1fr 1fr; 
+            margin-left: rem;
+            width: 200%;
+        }
+        .exit-button {
+         margin-top: 5px; /* Adjust this value to bring it closer */
         }
 
         button {
@@ -121,6 +126,7 @@ if (isset($_POST['import_csv'])) {
             transition: background-color 0.3s, color 0.3s;
             text-align: center;
             width: 50%; 
+            margin-top: 20px;
         }
 
         button:hover {
@@ -139,7 +145,7 @@ if (isset($_POST['import_csv'])) {
 
         <div class="button-group">
             <form action="main_menu.php" method="get">
-                <button type="submit">Exit</button>
+                <button type="submit" class="exit-button">Exit</button>
             </form>
         </div>
 
