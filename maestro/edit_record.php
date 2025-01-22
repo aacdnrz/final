@@ -1,5 +1,6 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "maestro");
+$conn = new mysqli("localhost", "root", "", "login");
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
@@ -9,16 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $createdDate = $_POST['created_date'];
     $remarks = $_POST['remarks'];
 
-    $sql = "UPDATE login SET Username='$username', Password='$password', Role='$role', 
+
+    $sql = "UPDATE login SET Username='$username', Password='$password', Role='$role',
             CreatedDate='$createdDate', Remarks='$remarks' WHERE id='$id'";
 
+
     if ($conn->query($sql)) {
-        echo "<script>alert('Record updated successfully.');</script>";
+        echo "Record updated successfully.";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit a Record</title>
     <style>
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(to bottom, #fae2e2, #ffbcba, #ff948f, #ff6962, #ff3333);
@@ -38,19 +43,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             min-height: 100vh;
         }
 
+
         .container {
             background-color: #c41d1d;
             color: white;
             text-align: center;
             border-radius: 10px;
             padding: 30px;
-            width: 500px;
+            width: 500px
         }
+
 
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
         }
+
 
         label {
             display: block;
@@ -59,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-align: left;
             margin-left: 30px;
         }
+
 
         input {
             width: 85%;
@@ -69,14 +78,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             outline: 1px solid black;
         }
 
+
         form {
             margin-bottom: 20px;
         }
 
+
         .button-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr; /* Two columns */
         }
+
 
         button {
             display: inline-block;
@@ -94,8 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             width: 60%;
         }
 
+
         button:hover {
-            background-color: #ff948f;
+            background-color:  #ff948f;
             color: white;
         }
     </style>
@@ -107,28 +120,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="id">ID:</label>
             <input type="number" id="id" name="id" required><br>
 
+
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
+
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
 
+
             <label for="role">Role:</label>
             <input type="text" id="role" name="role" required><br>
+
 
             <label for="created_date">Created Date:</label>
             <input type="date" id="created_date" name="created_date" required><br>
 
-            <label for="remarks">Remarks:</label>
-            <input type="text" id="remarks" name="remarks" required><br>
 
-            <div class="button-group">
+            <label for="remarks">Remarks:</label>
+            <input type="text" id="remarks" name="remarks"><br>
+
+
+           
+        </form>
+        <div class="button-group">
+            <form action="main_menu.php" method="get">
+                <button type="submit">Exit</button>
+            </form>
+            <form>
                 <button type="submit">Update Record</button>
-            </div>
-        </form>
-        <form action="main_menu.php" method="get">
-            <button type="submit">Exit</button>
-        </form>
+            </form>
+        </div>
     </div>
 </body>
 </html>
+
+
+
