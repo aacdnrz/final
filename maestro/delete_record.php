@@ -199,19 +199,20 @@ $result = $conn->query($sql);
         <?php endif; ?>
 
         <!-- Form for deletion -->
+        <form id="deleteForm" method="POST" action="">
+            <input type="number" name="id" id="id" placeholder="Enter ID to Delete" required>
+        </form>
 
         <div class="button-group">
-        <button type="button" onclick="confirmDelete()">Delete Record</button>
             <form action="main_menu.php" method="get">
                 <button type="submit">Exit</button>
             </form>
-
-            <form id="deleteForm" method="POST" action="">
-            <input type="number" name="id" id="id" placeholder="Enter ID to Delete" required>
-            </form>
+            <button type="button" onclick="confirmDelete()">Delete Record</button>
         </div>
     </div>
 </body>
 </html>
 
-
+<?php
+$conn->close();
+?>
